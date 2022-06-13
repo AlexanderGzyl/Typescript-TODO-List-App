@@ -1,0 +1,11 @@
+# setup
+We are using snowpack for this tutorial. It looks like I should switch to vite in the future. It is a bundler that allows us to use node modules easily
+
+# notes
+- hover over variables and functions to get type
+type can be specified with <> or as
+
+- if type any specify or create a type for it
+
+- not every library has types or is written in typescripts
+- try installing library with types (it could be a separate library)
