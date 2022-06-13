@@ -1,10 +1,11 @@
-# To do list application written in typescript
+# To do list application in progess
 
-> ✨ Bootstrapped with Create Snowpack App (CSA).
+## Goals
+Become familiar with typescript and convert vanilla javascript to typescript
 
 ## Info
 
-### tutorials used
+### tutorials being used
 
 https://www.youtube.com/watch?v=jBmrduvKl5w
 
