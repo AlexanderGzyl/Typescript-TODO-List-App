@@ -9,3 +9,14 @@ type can be specified with <> or as
 
 - not every library has types or is written in typescripts
 - try installing library with types (it could be a separate library)
+
+- compiler will generate a dist/index.js which will be used in index.html
+# css and html
+- labels are super user friendly always add them
+- grid is a good choice in this case because there is less code you just need to set up the columns and rows. 
+first row is made up of headers, second is lists and active
+1fr is the available space left
+- font size calc for large titles only
+- rem vs em
+- add letter space to bold small font to increase readability
+- locally scoped custom properties (--spacer) can be okay if they are only used in one spot
