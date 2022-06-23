@@ -11,6 +11,17 @@ type can be specified with <> or as
 - try installing library with types (it could be a separate library)
 
 - compiler will generate a dist/index.js which will be used in index.html
+# Javascript
+local storage & JSON.parse :Type of JSON.parse dependency must be a string .
+But the local storage return type is string|null so it can be both string and null and when you declare the data, its value is null until you render the component (or call the function) and then call the getItem function, it gets the value, and then it's a string.
+You can use || operator and add a string to it so that it is not null anymore.
+
+- object could be null solutions
+1) write an if statement type guard to check if null
+2) use non-null assertion operator !
+3) initialize them upfront with interface and readonly
+
+- template tag doesn't render to page but can be accessed by javascript. we can then clone the template. it makes rendering complex elements easier
 # css and html
 - labels are super user friendly always add them
 - grid is a good choice in this case because there is less code you just need to set up the columns and rows. 
