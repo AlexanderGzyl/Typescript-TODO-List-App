@@ -1,8 +1,8 @@
 :root {
-  --clr-primary: rgb(54, 112, 199);
-  --clr-light: #f4f4f4;
-  --clr-dark: #333;
-  --clr-warning: rgb(99, 36, 36);
+  --clr-primary: #05386B;
+  --clr-light: #8EE4AF;
+  --clr-dark: #379683;
+  --clr-warning: #FA9886;
 }
 
 *,
@@ -202,7 +202,7 @@ form {
   width: 100%;
   left: 0;
   bottom: -35px;
-  color: var(--clr-light)
+  color: white;
 }
 
 .btn.delete {

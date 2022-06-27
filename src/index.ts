@@ -1,4 +1,16 @@
 import { v4 as uuidV4 } from "uuid";
+//specific types
+type Task = {
+    id:string
+    name:string
+    complete:boolean
+}
+type List = {
+    id:string
+    name:string
+    tasks:Array<Task>
+
+}
 
 //showing the list of tasks
 //select unordered list
@@ -11,7 +23,7 @@ const deleteListButton = document.querySelector('[data-delete-list-button]')
 const listDisplayContainer = document.querySelector<HTMLDivElement>('[data-list-display-container]')
 const listTitleElement = document.querySelector<HTMLHeadElement>('[data-list-title]')
 const listCountElement = document.querySelector<HTMLParagraphElement>('[data-list-count]')
-const tasksContainer = document.querySelector('[data-tasks]')
+const tasksContainer = document.querySelector<HTMLDivElement>('[data-tasks]')
 const taskTemplate = document.getElementById('task-template') as HTMLTemplateElement;
 const newTaskForm = document.querySelector('[data-new-task-form]') as HTMLFormElement | null;
 const newTaskInput = document.querySelector<HTMLInputElement>('[data-new-task-input]')
@@ -29,26 +41,31 @@ listsContainer?.addEventListener('click', e =>{
 
 tasksContainer?.addEventListener('click', e => {
     if ((e.target as Element)?.tagName.toLowerCase() === 'input') {
-        const selectedList = lists.find((list:any) => list.id === selectedListId)
-        const selectedTask = selectedList.tasks.find((task:any) => task.id === (e.target as Element)?.id)
-        selectedTask.complete = (e.target as HTMLInputElement)?.checked
+        const selectedList = lists.find((list:List) => list.id === selectedListId)
+        if (selectedList !== undefined) {
+            const selectedTask = selectedList.tasks.find((task:Task) => task.id === (e.target as Element)?.id)
+        selectedTask!.complete = (e.target as HTMLInputElement)?.checked
         save()
         renderTaskCount(selectedList)
+        }
+        
     }
 })
 //add custom typing
 //get info from local storage...if it doesn't exist give us an empty array
-let lists:any = JSON.parse(localStorage.getItem(LOCAL_STORAGE_LIST_KEY)||"[]")|| []
+let lists:Array<List> = JSON.parse(localStorage.getItem(LOCAL_STORAGE_LIST_KEY)||"[]")|| []
 let selectedListId = localStorage.getItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY ||"[]") 
 
 clearCompleteTasksButton?.addEventListener('click', e => {
-    const selectedList = lists.find((list:any) => list.id === selectedListId)
-    selectedList.tasks = selectedList.tasks.filter((task:any) => !task.complete)
-    saveAndRender()
+    const selectedList = lists.find((list:List) => list.id === selectedListId)
+    if (selectedList !== undefined) {
+        selectedList.tasks = selectedList.tasks.filter((task:Task) => !task.complete)
+        saveAndRender()
+    }
 })
 
 deleteListButton?.addEventListener('click', e => {
-    lists = lists.filter((list:any) => list.id !== selectedListId)
+    lists = lists.filter((list:List) => list.id !== selectedListId)
     //selected list removed
     selectedListId = null;
     saveAndRender()
@@ -73,18 +90,20 @@ if (newTaskInput != null) {
         if(taskName == null || taskName === '') return
         const task = createTask(taskName)
         newTaskInput.value = '';
-        const selectedList = lists.find((list:any)=> list!.id === selectedListId)
-        selectedList.tasks.push(task)
-        saveAndRender()
+        const selectedList = lists.find((list:List)=> list!.id === selectedListId)
+        if (selectedList !== undefined) {
+            selectedList.tasks.push(task)
+            saveAndRender()
+        }
     })
 }
 
-function createTask(name:any){
-    return {id:Date.now().toString(), name:name, complete:false}
+function createTask(name:string){
+    return {id:uuidV4() , name:name, complete:false}
 }
 //
-function createList(name:any) {
-    return {id:Date.now().toString(), name:name, tasks:[]}
+function createList(name:string) {
+    return {id:uuidV4(), name:name, tasks:[]}
 }
 //save lists to local storage
 function save(){
@@ -106,10 +125,10 @@ function saveAndRender() {
 function render() {
     clearElement(listsContainer)
     renderLists()
-    const selectedList = lists.find((list:any) => list.id === selectedListId)
+    const selectedList = lists.find((list:List) => list.id === selectedListId)
     if (selectedListId == null && listDisplayContainer !== null) {
         listDisplayContainer.style.display = 'none'
-    } else if(selectedListId !== null ) {
+    } else if(selectedListId !== null && selectedList !== undefined) {
         listDisplayContainer!.style.display = '';
         listTitleElement!.innerText = selectedList.name
         renderTaskCount(selectedList)
@@ -118,8 +137,8 @@ function render() {
     }
 }
 
-function renderTasks(selectedList:any){
-    selectedList.tasks.forEach((task:any) =>{
+function renderTasks(selectedList:List){
+    selectedList.tasks.forEach((task:Task) =>{
         const taskElement = document.importNode(taskTemplate!.content, true)
         const checkbox = taskElement.querySelector('input')
         checkbox!.id = task.id
@@ -131,15 +150,15 @@ function renderTasks(selectedList:any){
     })
 }
 
-function renderTaskCount(selectedList:any){
-    const incompleteTaskCount = selectedList.tasks.filter((task:any) => 
+function renderTaskCount(selectedList:List){
+    const incompleteTaskCount = selectedList.tasks.filter((task:Task) => 
         !task.complete).length
     const taskString = incompleteTaskCount === 1 ? "task" : "tasks"
     listCountElement!.innerText = `${incompleteTaskCount} ${taskString} remaining`
 }
 
 function renderLists(){
-    lists.forEach((list: any) => {
+    lists.forEach((list: List) => {
         //create element
         const listElement = document.createElement("li");
         //add id
@@ -158,11 +177,14 @@ function renderLists(){
     })
 
 }
-//clear lists ocntainer before appending an item
-function clearElement(element:any){
-    while(element.firstChild){
-        element.removeChild(element.firstChild)
+//clear lists (UL) and tasks(div) containers before appending an item
+function clearElement(element:HTMLUListElement | HTMLDivElement | null){
+    if (element !== null) {
+        while(element.firstChild){
+            element.removeChild(element.firstChild)
+        }
     }
+    
 }
 
 render();
