@@ -3,12 +3,12 @@
 
 
 ## Goals
-Become familiar with typescript by converting vanilla javascript to typescript
+Become familiar with typescript by converting vanilla javascript into typescript
 
 ## Info
 This is a simple to do list application That allows you to create lists consisting of a set a tasks. Tasks can be crossed off when finished and cleared. Lists can also be deleted.
 
-### tutorials being used
+### Tutorials being used
 
 https://www.youtube.com/watch?v=jBmrduvKl5w
 
